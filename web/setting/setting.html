@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello - Settings</title>
+    <link rel="stylesheet" href="setting.css" />
+</head>
+<body>
+    <div class="star-field" id="starField"></div>
+    <div class="bg-layer" id="bgLayer"></div>
+
+    <div class="app">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../Resources/Logo.png" alt="Hello logo">
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item" onclick="location.href=' '">
+                        <span class="nav-icon">◈</span>Homepage
+                    </li>
+                    <li class="nav-item" onclick="location.href='../home/homepage.html'">
+                        <span class="nav-icon">◉</span>My Projects
+                        <span class="chevron">▾</span>
+                    </li>
+                    <li class="nav-item active">
+                        <span class="nav-icon">⚙</span>Settings
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-icon">◎</span>About us
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="status-dot"></div>
+                <span>Orbit v2.0</span>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="content">
+            <header class="content-header">
+                <div class="header-left">
+                    <div class="breadcrumb">CONFIGURATION</div>
+                    <h1>Settings</h1>
+                </div>
+                <button class="save-btn" id="saveBtn">
+                    <span class="save-icon">✦</span> Save Changes
+                </button>
+            </header>
+
+            <!-- TABS -->
+            <div class="tabs-bar">
+                <button class="tab active" data-tab="workspace">Workspace</button>
+                <button class="tab" data-tab="appearance">Appearance</button>
+                <button class="tab" data-tab="notifications">Notifications</button>
+                <button class="tab" data-tab="account">Account</button>
+            </div>
+
+            <!-- PANELS -->
+            <div class="panels-wrap">
+
+                <!-- ── WORKSPACE ── -->
+                <section class="panel active" id="tab-workspace">
+                    <div class="section-title">Timeline Range</div>
+                    <div class="card">
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Start Date</div>
+                                <div class="card-sub">First day displayed on the task board</div>
+                            </div>
+                            <input type="date" class="date-input" id="startDate" />
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">End Date</div>
+                                <div class="card-sub">Last day displayed on the task board</div>
+                            </div>
+                            <input type="date" class="date-input" id="endDate" />
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Preview</div>
+                                <div class="card-sub" id="rangePreview">— days selected</div>
+                            </div>
+                            <div class="range-badge" id="rangeBadge">0d</div>
+                        </div>
+                    </div>
+
+                    <div class="section-title">Time Display</div>
+                    <div class="card">
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Hour Format</div>
+                                <div class="card-sub">How hours are shown on the ruler</div>
+                            </div>
+                            <div class="seg-control" id="hourFormat">
+                                <button class="seg active" data-val="24">24h</button>
+                                <button class="seg" data-val="12">12h</button>
+                            </div>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Show Weekends</div>
+                                <div class="card-sub">Include Saturday & Sunday in the board</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="showWeekends" />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Start of Week</div>
+                                <div class="card-sub">Which day begins each week row</div>
+                            </div>
+                            <div class="seg-control" id="weekStart">
+                                <button class="seg active" data-val="mon">Mon</button>
+                                <button class="seg" data-val="sun">Sun</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-title">Task Board</div>
+                    <div class="card">
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Default Task Duration</div>
+                                <div class="card-sub">Width in hours when a new task is created</div>
+                            </div>
+                            <div class="stepper">
+                                <button class="step-btn" id="durMinus">−</button>
+                                <span class="step-val" id="durVal">2h</span>
+                                <button class="step-btn" id="durPlus">+</button>
+                            </div>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Snap to Grid</div>
+                                <div class="card-sub">Tasks snap to nearest 30-min interval</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="snapGrid" checked />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Overlap Warning</div>
+                                <div class="card-sub">Highlight when tasks collide</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="overlapWarn" checked />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── APPEARANCE ── -->
+                <section class="panel" id="tab-appearance">
+                    <div class="section-title">Background</div>
+                    <div class="card">
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Custom Wallpaper</div>
+                                <div class="card-sub">Upload an image from your device</div>
+                            </div>
+                            <label class="upload-btn" for="bgUpload">
+                                <span>↑ Upload</span>
+                                <input type="file" id="bgUpload" accept="image/*" hidden />
+                            </label>
+                        </div>
+                        <div class="bg-preview-row" id="bgPreviewRow" style="display:none;">
+                            <div class="bg-thumb" id="bgThumb"></div>
+                            <div class="bg-info">
+                                <div class="bg-filename" id="bgFilename">—</div>
+                                <button class="remove-bg-btn" id="removeBg">Remove</button>
+                            </div>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Background Dim</div>
+                                <div class="card-sub">Overlay darkness on custom wallpaper</div>
+                            </div>
+                            <div class="slider-wrap">
+                                <input type="range" class="range-slider" id="bgDim" min="0" max="90" value="55" />
+                                <span class="range-val" id="bgDimVal">55%</span>
+                            </div>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Star Field</div>
+                                <div class="card-sub">Animated stars in the background</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="showStars" checked />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Star Density</div>
+                                <div class="card-sub">Number of stars rendered</div>
+                            </div>
+                            <div class="seg-control" id="starDensity">
+                                <button class="seg" data-val="low">Low</button>
+                                <button class="seg active" data-val="medium">Med</button>
+                                <button class="seg" data-val="high">High</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-title">Interface</div>
+                    <div class="card">
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Sidebar Width</div>
+                                <div class="card-sub">Adjust the navigation panel size</div>
+                            </div>
+                            <div class="slider-wrap">
+                                <input type="range" class="range-slider" id="sidebarWidth" min="200" max="320" value="240" />
+                                <span class="range-val" id="sidebarWidthVal">240px</span>
+                            </div>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Glass Blur</div>
+                                <div class="card-sub">Frosted glass intensity on panels</div>
+                            </div>
+                            <div class="seg-control" id="glassBlur">
+                                <button class="seg" data-val="off">Off</button>
+                                <button class="seg active" data-val="normal">Normal</button>
+                                <button class="seg" data-val="strong">Strong</button>
+                            </div>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Reduced Motion</div>
+                                <div class="card-sub">Disable animations for accessibility</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="reducedMotion" />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section-title">Accent Color</div>
+                    <div class="card">
+                        <div class="card-row" style="flex-wrap:wrap; gap:14px;">
+                            <div class="color-swatches" id="colorSwatches">
+                                <div class="swatch active" data-color="#ffffff" style="background:#ffffff;" title="White"></div>
+                                <div class="swatch" data-color="#7eb8f7" style="background:#7eb8f7;" title="Nebula Blue"></div>
+                                <div class="swatch" data-color="#c084fc" style="background:#c084fc;" title="Violet"></div>
+                                <div class="swatch" data-color="#ffd76e" style="background:#ffd76e;" title="Gold"></div>
+                                <div class="swatch" data-color="#6ee7b7" style="background:#6ee7b7;" title="Mint"></div>
+                                <div class="swatch" data-color="#fb7185" style="background:#fb7185;" title="Rose"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── NOTIFICATIONS ── -->
+                <section class="panel" id="tab-notifications">
+                    <div class="section-title">Alerts</div>
+                    <div class="card">
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Task Reminders</div>
+                                <div class="card-sub">Notify before a task begins</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="taskReminder" checked />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Reminder Lead Time</div>
+                                <div class="card-sub">How many minutes before task start</div>
+                            </div>
+                            <div class="stepper">
+                                <button class="step-btn" id="remMinus">−</button>
+                                <span class="step-val" id="remVal">15m</span>
+                                <button class="step-btn" id="remPlus">+</button>
+                            </div>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Deadline Warning</div>
+                                <div class="card-sub">Alert when a task is overdue</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="deadlineWarn" checked />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Sound Effects</div>
+                                <div class="card-sub">Play sounds on task events</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="soundFx" />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section-title">Digest</div>
+                    <div class="card">
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Daily Summary</div>
+                                <div class="card-sub">Show today's tasks when you open the app</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="dailySummary" checked />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Weekly Report</div>
+                                <div class="card-sub">End-of-week productivity digest</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="weeklyReport" />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── ACCOUNT ── -->
+                <section class="panel" id="tab-account">
+                    <div class="section-title">Profile</div>
+                    <div class="card">
+                        <div class="card-row">
+                            <div class="avatar-wrap">
+                                <div class="avatar" id="avatarDisplay">✦</div>
+                                <label class="avatar-upload-btn" for="avatarUpload">Change</label>
+                                <input type="file" id="avatarUpload" accept="image/*" hidden />
+                            </div>
+                            <div class="profile-fields">
+                                <input type="text" class="field-input" id="displayName" placeholder="Display Name" value="Astronaut" />
+                                <input type="email" class="field-input" id="userEmail" placeholder="Email address" value="crew@orbit.space" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-title">Preferences</div>
+                    <div class="card">
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Language</div>
+                                <div class="card-sub">Interface display language</div>
+                            </div>
+                            <select class="select-input" id="langSelect">
+                                <option value="en">English</option>
+                                <option value="vi">Tiếng Việt</option>
+                                <option value="ja">日本語</option>
+                                <option value="fr">Français</option>
+                            </select>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Timezone</div>
+                                <div class="card-sub">Used for task time calculations</div>
+                            </div>
+                            <select class="select-input" id="tzSelect">
+                                <option>UTC+7 (Ho Chi Minh)</option>
+                                <option>UTC+0 (London)</option>
+                                <option>UTC-5 (New York)</option>
+                                <option>UTC+9 (Tokyo)</option>
+                                <option>UTC+8 (Singapore)</option>
+                            </select>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Auto-save</div>
+                                <div class="card-sub">Automatically save changes</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="autoSave" checked />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section-title">Data</div>
+                    <div class="card">
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Export All Data</div>
+                                <div class="card-sub">Download your projects as JSON</div>
+                            </div>
+                            <button class="action-btn" id="exportBtn">Export ↓</button>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Clear All Tasks</div>
+                                <div class="card-sub">Remove every task from all projects</div>
+                            </div>
+                            <button class="action-btn danger" id="clearBtn">Clear</button>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Reset to Defaults</div>
+                                <div class="card-sub">Restore all settings to factory state</div>
+                            </div>
+                            <button class="action-btn danger" id="resetBtn">Reset</button>
+                        </div>
+                    </div>
+                </section>
+
+            </div><!-- end panels-wrap -->
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="setting.js"></script>
+</body>
+</html>

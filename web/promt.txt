@@ -1,0 +1,3 @@
+homepage:
+độ dài các ô task tương ứng với thời gian thực hiện tag đó, cải thiện giao diện phù hợp với vibe của logo hơn
+nền có thể thay đổi tuỳ người dùng

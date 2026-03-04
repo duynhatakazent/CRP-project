@@ -1,0 +1,222 @@
+@font-face {
+  font-family: 'Sinoreta';
+  src: url('../Resources/Sinoreta_PERSONAL_USE_ONLY.otf') format('truetype');
+}
+
+:root {
+  --fg: #fff;
+  --muted: #bdbdbd;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Sinoreta', sans-serif;
+  background: radial-gradient(circle at top, #111 0%, #000 70%);
+  color: var(--fg);
+  overflow-x: hidden;
+}
+
+/* STAR BACKGROUND */
+.stars::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 60%, #fff, transparent),
+    radial-gradient(1px 1px at 40% 80%, #fff, transparent);
+  opacity: 0.4;
+  animation: twinkle 6s infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes twinkle {
+  from { opacity: .2; }
+  to { opacity: .6; }
+}
+
+/* PARTICLES */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  /* Ép toàn bộ container vào chế độ 3D */
+  transform-style: preserve-3d;
+}
+
+.diamond {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  background: #fff;
+  /* Loại bỏ filter: drop-shadow(...) */
+  will-change: transform;
+  /* Khử răng cưa và làm mượt chuyển động 3D */
+  -webkit-font-smoothing: antialiased;
+  /* Cách 1: Dùng box-shadow (Nhẹ hơn nhiều) */
+  box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.4);
+  
+  /* Cách 2 (Tối ưu nhất): Dùng pseudo-element để tạo hào quang tĩnh */
+  perspective: 1000px;
+  backface-visibility: hidden;
+}
+
+/* Tạo lớp glow giả mà không cần tính toán filter */
+.diamond::after {
+  content: '';
+  position: absolute;
+  inset: -4px; /* Độ rộng của hào quang */
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+@keyframes drift {
+  from { transform: translateY(110vh) rotate(45deg); }
+  to   { transform: translateY(-20vh) rotate(45deg); }
+}
+
+/* HERO */
+header {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.orbit {
+  position: absolute;
+  width: 120%;
+  height: 60%;
+  border: 2px solid rgba(255,255,255,.25);
+  border-radius: 50%;
+  transform: rotate(-8deg);
+  animation: float 12s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100% { transform: rotate(-8deg) translateY(0); }
+  50% { transform: rotate(-8deg) translateY(-15px); }
+}
+
+.logo {
+  width: min(420px, 70vw);
+  font-family: 'Sinoreta', serif;
+  animation: fadeUp 1.2s ease forwards, glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { filter: drop-shadow(0 0 10px rgba(255,255,255,.2)); }
+  to   { filter: drop-shadow(0 0 28px rgba(255,255,255,.7)); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+p {
+  color: var(--muted);
+  max-width: 520px;
+}
+
+/* BUTTONS */
+.cta {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  padding: .9rem 1.8rem;
+  border-radius: 999px;
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 0 28px rgba(255,255,255,.4);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,.45),
+    transparent
+  );
+  transform: translateX(-120%);
+}
+
+.btn:hover::before {
+  animation: shine .8s ease forwards;
+}
+
+@keyframes shine {
+  to { transform: translateX(120%); }
+}
+
+.btn.primary {
+  background: #fff;
+  color: #000;
+}
+
+/* BOARD */
+section {
+  padding: 6rem 8vw;
+}
+
+h2 {
+  text-align: center;
+  font-family: 'Sinoreta', serif;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.column {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 18px;
+  padding: 1.2rem;
+}
+
+.card {
+  background: rgba(0,0,0,.7);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: .9rem;
+  margin-bottom: .7rem;
+}
+
+footer {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #777;
+}
+
+.cta .btn{
+  font-family: 'Sinoreta';
+}
