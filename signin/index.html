@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello - Sign-In</title>
+    <link rel="stylesheet" href="../landing/landingpage.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body class="stars">
+    <div class="particles">
+        <div class="diamond" style="--size:6px; left:15%;"></div>
+        <div class="diamond" style="--size:10px; left:35%;"></div>
+        <div class="diamond" style="--size:4px; left:60%;"></div>
+        <div class="diamond" style="--size:8px; left:85%;"></div>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="../Resources/Logo.png" alt="Logo" class="mini-logo">
+                <h2 id="auth-title">Welcome Back</h2>
+                <p id="auth-subtitle">Enter your orbit to continue.</p>
+            </div>
+
+            <form id="auth-form">
+                <div class="input-group">
+                    <input type="email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn primary full-width">Launch</button>
+            </form>
+
+            <div class="auth-footer">
+                <span id="toggle-text">Don't have an account?</span>
+                <a href="../signup/index.html" id="toggle-auth">Create Universe</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="../landing/landingpage.js"></script>
+    <script src="signin.js"></script>
+</body>
+</html>

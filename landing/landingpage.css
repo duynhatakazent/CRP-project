@@ -1,0 +1,186 @@
+@font-face {
+  font-family: 'Sinoreta';
+  src: url('../Resources/hastegi/Hastegi.otf') format('truetype');
+}
+*{
+    font-size: large;
+}
+:root {
+  --fg: #fff;
+  --muted: #bdbdbd;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Sinoreta', sans-serif;
+  background: #000;
+  color: var(--fg);
+  overflow-x: hidden;
+}
+
+/* ─── STAR FIELD ─── */
+.star-field {
+    position: fixed;
+    inset: 0;
+    z-index: -1; /* Ensure it's behind content */
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    /* transition is handled by JS animation frame */
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.9; }
+}
+
+/* HERO */
+header {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1; 
+}
+
+.orbit {
+  position: absolute;
+  width: 120%;
+  height: 60%;
+  border: 2px solid rgba(255,255,255,.25);
+  border-radius: 50%;
+  transform: rotate(-8deg);
+  animation: float 12s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100% { transform: rotate(-8deg) translateY(0); }
+  50% { transform: rotate(-8deg) translateY(-15px); }
+}
+
+.logo {
+  width: min(420px, 70vw);
+  font-family: 'Sinoreta', serif;
+  animation: fadeUp 1.2s ease forwards, glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { filter: drop-shadow(0 0 10px rgba(255,255,255,.2)); }
+  to   { filter: drop-shadow(0 0 28px rgba(255,255,255,.7)); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+p {
+  color: var(--muted);
+  max-width: 520px;
+}
+
+/* BUTTONS */
+.cta {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  padding: .9rem 1.8rem;
+  border-radius: 999px;
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 0 28px rgba(255,255,255,.4);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,.45),
+    transparent
+  );
+  transform: translateX(-120%);
+}
+
+.btn:hover::before {
+  animation: shine .8s ease forwards;
+}
+
+@keyframes shine {
+  to { transform: translateX(120%); }
+}
+
+.btn.primary {
+  background: #fff;
+  color: #000;
+}
+
+/* BOARD */
+section {
+  padding: 6rem 8vw;
+}
+
+h2 {
+  text-align: center;
+  font-family: 'Sinoreta', serif;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.column {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 18px;
+  padding: 1.2rem;
+}
+
+.card {
+  background: rgba(0,0,0,.7);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: .9rem;
+  margin-bottom: .7rem;
+}
+
+footer {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #777;
+}
+
+.cta .btn{
+  font-family: 'Sinoreta';
+}

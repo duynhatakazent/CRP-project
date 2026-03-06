@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello - My Projects</title>
+    <link rel="stylesheet" href="project.css" />
+</head>
+<body class="stars-bg">
+    <div class="star-field" id="starField"></div>
+
+    <div class="app">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../Resources/Logo.png" alt="Hello logo">
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <span class="nav-icon">◈</span>Homepage
+                    </li>
+                    <li class="nav-item active">
+                        <span class="nav-icon">◉</span>My Projects
+                        <span class="chevron">▾</span>
+                    </li>
+                    <ul class="sub-menu open" id="projectList">
+                        <li class="add-project" onclick="addNewProject()">
+                            <span class="plus-icon">+</span> New Project
+                        </li>
+                    </ul>
+                    <li class="nav-item">
+                        <span class="nav-icon">⚙</span>Settings
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-icon">◎</span>About us
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="status-dot"></div>
+                <span>Orbit v2.0</span>
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="content-header">
+                <div class="header-left">
+                    <div class="breadcrumb">WORKSPACE</div>
+                    <h1 id="projectName">"Project Nebula"</h1>
+                </div>
+                <div class="header-right">
+                    <button id="addTaskBtn" class="btn primary">Add Task</button>
+                    <div class="time-range-label">—</div>
+                </div>
+            </header>
+
+            <div class="timeline-wrapper">
+                <div class="timeline-container">
+                    <div class="timeline-ruler">
+                        <div class="spacer">
+                            <span class="spacer-label">TIMELINE</span>
+                        </div>
+                        <div class="hours-scale" id="hoursScale"></div>
+                    </div>
+                    <div class="days-grid" id="daysGrid"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="taskModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">New Mission</h2>
+                <div class="modal-close" id="cancelBtn">✕</div>
+            </div>
+            <div class="input-group">
+                <label>Mission Name</label>
+                <input type="text" id="taskInput" placeholder="Enter task name..." />
+            </div>
+            <div class="input-group">
+                <label>Date</label>
+                <input type="date" id="taskDateInput" />
+            </div>
+            <div class="input-group">
+                <label>Status</label>
+                <select id="taskStatusSelect">
+                    <option value="Not Started">Not Started</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Done">Done</option>
+                    <option value="Dropped">Dropped</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Notes</label>
+                <textarea id="taskNote" placeholder="Optional notes..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Image URL</label>
+                <div class="file-input-wrapper">
+                    <input type="text" id="taskImageUrl" placeholder="https://..." />
+                    <label for="taskImageFile" class="file-input-label">Choose File</label>
+                    <input type="file" id="taskImageFile" accept="image/*" class="file-input-hidden" />
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Assign to</label>
+                <select id="taskMembersSelect"></select>
+            </div>
+            <div class="modal-actions">
+                <button id="deleteBtn" class="danger">Delete Mission</button>
+                <button id="abortBtn">Abort</button>
+                <button id="confirmBtn">⟶ Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="contextMenu" class="context-menu">
+        <div class="menu-item" id="menuEdit">
+            <span class="menu-icon">✎</span> Edit Task
+        </div>
+        <div class="menu-divider"></div>
+        <div class="menu-item danger" id="menuDelete">
+            <span class="menu-icon">⊗</span> Delete Task
+        </div>
+    </div>
+
+    <!-- Project context menu -->
+    <div id="projectContextMenu" class="context-menu">
+        <div class="menu-item" id="pmenuStar">
+            <span class="menu-icon" id="pmenuStarIcon">☆</span>
+            <span id="pmenuStarLabel">Mark as Starred</span>
+        </div>
+        <div class="menu-divider"></div>
+        <div class="menu-item" id="pmenuSettings">
+            <span class="menu-icon">⚙</span> Settings
+        </div>
+        <div class="menu-divider"></div>
+        <div class="menu-item danger" id="pmenuDelete">
+            <span class="menu-icon">⊗</span> Delete Project
+        </div>
+    </div>
+
+    <div id="projectSettingsModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="settingsModalTitle">Project Settings</h2>
+                <div class="modal-close" id="cancelSettingsBtn">✕</div>
+            </div>
+            <div class="input-group">
+                <label>Project Name</label>
+                <input type="text" id="projectNameInput" placeholder="Enter project name..." />
+            </div>
+            <div class="input-group">
+                <label>Background</label>
+                <div class="file-input-wrapper">
+                    <input type="text" id="projectBackgroundInput" placeholder="Enter background image URL..." />
+                    <label for="projectBackgroundFile" class="file-input-label">Choose File</label>
+                    <input type="file" id="projectBackgroundFile" accept="image/*" class="file-input-hidden" />
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Members</label>
+                <div id="projectMembersList" class="members-list"></div>
+                <button id="addMemberBtn" class="btn-add-member">+ Add Member</button>
+            </div>
+            <div class="modal-actions">
+                <button id="confirmSettingsBtn">⟶ Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inline rename popup -->
+    <div id="renamePopup" class="rename-popup">
+        <div class="rename-label">Rename Project</div>
+        <input id="renameInput" type="text" placeholder="Project name..." />
+        <div class="rename-actions">
+            <button id="renameCancelBtn">Cancel</button>
+            <button id="renameConfirmBtn">Rename</button>
+        </div>
+    </div>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="customConfirmModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="customConfirmTitle"></h2>
+                <div class="modal-close" id="customConfirmClose">✕</div>
+            </div>
+            <p id="customConfirmMessage"></p>
+            <div class="modal-actions">
+                <button id="customConfirmCancel">Cancel</button>
+                <button id="customConfirmOk">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="project.js"></script>
+</body>
+</html>

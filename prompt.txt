@@ -1,0 +1,18 @@
+*project-page:
+ - chuột phải vào dự án để mở setting cho dự án, trong setting bao gồm: 
+    + Chỉnh giới hạn thời gian cho dự án
+    + Background của riêng dự án đó
+    + Tên dự án
+    + Các thành viên thực hiện, thành viên sẽ đc dán màu
+ - Thêm chuyển trang
+ - đổi lại thành có nút thêm task, trong thêm task có các mục: ngày tháng năm mà task đó thuộc, tên task, note trong task, hình ảnh đính kèm trong task, trạng thái task (chưa bắt đầu là mặc định, đang thực hiện, đã xong, drop).
+ - khi double-click vào task, sẽ thấy đc cụ thể task sẽ như thế nào.
+ - Animation lúc bảng thông báo hiện ra
+ - Ô task sẽ tự động tính toán thời gian tuỳ theo độ dài và vị trí nó ở, hiện trực tiếp lên ô, và trên ô có trạng thái của task, ô task sẽ có màu theo như thành viên thực hiện (trong phần edit task hoặc add task sẽ có ô thành viên thực hiện, nó sẽ hiện selection các thành viên thực hiện, sau đó tự động thêm màu theo thành viên đó)
+ - ô task 
+*Tạo thêm trang about us
+*Landing page:
+ - Sửa live demo thành about us
+ - Tạo thêm 1 phần về ví dụ mẫu cho việc thêm dự án (có animation, về phần thêm task vào dự án)
+*Tất cả các thông báo đều đồng bộ thành 1 bảng tab hiện ra thay vì thông báo thô mặc định của hệ thống
+*
