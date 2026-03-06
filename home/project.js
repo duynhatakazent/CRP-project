@@ -230,6 +230,19 @@ function setupEventListeners() {
     document.addEventListener('mousemove', handleDragMove);
     document.addEventListener('mouseup', handleDragEnd);
 
+    // Load profile from settings
+    syncSidebarProfile();
+
+    // Logout button
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            if (confirm('Sign out of Orbit? Your data will remain saved.')) {
+                location.reload();
+            }
+        });
+    }
+
     // Select background color feedback
     document.getElementById('taskStatusSelect').addEventListener('change', updateSelectColor);
 }
@@ -341,11 +354,38 @@ function renderMemberRow(member = { name: '', color: '#ffffff' }) {
     const memberRow = document.createElement('div');
     memberRow.className = 'member-row';
     memberRow.innerHTML = `
-        <input type="color" class="member-color-input" value="${member.color}">
+        <div class="color-picker-wrap">
+            <input type="color" class="member-color-input" value="${member.color}">
+            <button class="color-confirm-btn" style="background:${member.color}" title="Confirm color">✓</button>
+        </div>
         <input type="text" class="member-name-input" placeholder="Member name..." value="${member.name}">
         <button class="btn-remove-member">✕</button>
     `;
     membersList.appendChild(memberRow);
+
+    const colorInput = memberRow.querySelector('.member-color-input');
+    const confirmBtn = memberRow.querySelector('.color-confirm-btn');
+
+    // Live preview on confirm button while picking
+    colorInput.addEventListener('input', () => {
+        confirmBtn.style.background = colorInput.value;
+        confirmBtn.style.transform = 'scale(1.12)';
+    });
+    colorInput.addEventListener('change', () => {
+        confirmBtn.style.transform = 'scale(1)';
+    });
+
+    // Confirm click: flash feedback
+    confirmBtn.addEventListener('click', () => {
+        confirmBtn.style.background = colorInput.value;
+        confirmBtn.style.boxShadow = `0 0 12px ${colorInput.value}99`;
+        confirmBtn.style.transform = 'scale(0.92)';
+        setTimeout(() => {
+            confirmBtn.style.transform = 'scale(1)';
+            confirmBtn.style.boxShadow = '';
+        }, 200);
+    });
+
     memberRow.querySelector('.btn-remove-member').addEventListener('click', () => memberRow.remove());
 }
 
@@ -732,6 +772,18 @@ function switchProject(id) {
     saveState();
     renderProjects();
     updateUIAfterProjectSwitch();
+}
+
+function syncSidebarProfile() {
+    try {
+        const raw = localStorage.getItem('orbitSettings');
+        if (!raw) return;
+        const s = JSON.parse(raw);
+        if (s.account) {
+            const nameEl = document.getElementById('sidebarName');
+            if (nameEl && s.account.displayName) nameEl.textContent = s.account.displayName;
+        }
+    } catch(e) {}
 }
 
 function layoutAllTasks() {
