@@ -12,6 +12,16 @@ const state = {
 };
 
 /**
+ * Navigate to a page with fade-out transition
+ */
+function navigateTo(url) {
+    document.body.classList.add('fade-out');
+    setTimeout(() => {
+        window.location.href = url;
+    }, 280);
+}
+
+/**
  * State Management
  */
 function saveState() {
@@ -22,7 +32,6 @@ function loadState() {
     const savedState = localStorage.getItem('helloProjectsState');
     if (savedState) {
         state.projects = JSON.parse(savedState);
-        // Migrate old projects: remove timeLimit field
         state.projects.forEach(p => { delete p.timeLimit; });
     } else {
         state.projects = [
@@ -41,9 +50,6 @@ function loadState() {
     }
 }
 
-/**
- * Format a Date as YYYY-MM-DD (local time, no UTC shift)
- */
 function toISODate(d) {
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -51,17 +57,11 @@ function toISODate(d) {
     return `${y}-${m}-${day}`;
 }
 
-/**
- * Parse YYYY-MM-DD string into local Date (midnight)
- */
 function fromISODate(str) {
     const [y, m, d] = str.split('-').map(Number);
     return new Date(y, m - 1, d);
 }
 
-/**
- * Initialization & UI Setup
- */
 document.addEventListener('DOMContentLoaded', () => {
     loadState();
     initStarField();
@@ -120,10 +120,6 @@ function initStarField() {
     }
 }
 
-/**
- * Build an infinite timeline: always shows today + all days that have tasks.
- * Dates are sorted chronologically. The header label shows the full range.
- */
 function initTimeline(taskDates = []) {
     const daysGrid = document.getElementById('daysGrid');
     const hoursScale = document.getElementById('hoursScale');
@@ -132,7 +128,6 @@ function initTimeline(taskDates = []) {
     daysGrid.innerHTML = '';
     hoursScale.innerHTML = '';
 
-    // Hour ruler
     for (let i = 0; i < 24; i++) {
         const h = document.createElement('div');
         h.className = 'hour-tick';
@@ -144,11 +139,9 @@ function initTimeline(taskDates = []) {
     today.setHours(0, 0, 0, 0);
     const todayISO = toISODate(today);
 
-    // Collect unique dates: always include today, plus all task dates
     const dateSet = new Set([todayISO, ...taskDates]);
     const sortedDates = [...dateSet].sort();
 
-    // Fill gaps: include every day between first and last date
     if (sortedDates.length >= 2) {
         const first = fromISODate(sortedDates[0]);
         const last  = fromISODate(sortedDates[sortedDates.length - 1]);
@@ -182,7 +175,6 @@ function initTimeline(taskDates = []) {
         daysGrid.appendChild(row);
     });
 
-    // Header label: show range
     if (allDates.length > 0) {
         const first = fromISODate(allDates[0]);
         const last  = fromISODate(allDates[allDates.length - 1]);
@@ -195,13 +187,11 @@ function initTimeline(taskDates = []) {
 
 function initPageTransitions() {
     document.body.classList.remove('fade-out');
-    document.querySelectorAll('.nav-item, .breadcrumb').forEach(el => {
+    document.querySelectorAll('.breadcrumb').forEach(el => {
         el.addEventListener('click', (e) => {
-            if (!el.classList.contains('dropdown-toggle')) {
-                e.preventDefault();
-                document.body.classList.add('fade-out');
-                setTimeout(() => { document.body.classList.remove('fade-out'); }, 300);
-            }
+            e.preventDefault();
+            document.body.classList.add('fade-out');
+            setTimeout(() => { document.body.classList.remove('fade-out'); }, 300);
         });
     });
 }
@@ -230,40 +220,31 @@ function setupEventListeners() {
     document.addEventListener('mousemove', handleDragMove);
     document.addEventListener('mouseup', handleDragEnd);
 
-    // Load profile from settings
     syncSidebarProfile();
 
-    // Logout button
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            if (confirm('Sign out of Orbit? Your data will remain saved.')) {
-                location.reload();
+        logoutBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (confirm('Sign out of Orbit? All your data will be cleared.')) {
+                localStorage.clear();
+                window.location.href = '../landing/landingpage.html';
             }
         });
     }
 
-    // Select background color feedback
     document.getElementById('taskStatusSelect').addEventListener('change', updateSelectColor);
 }
 
-/**
- * Makes a <select> element's background reflect its current value
- * Works by setting a data-value attribute and matching it in CSS,
- * or via inline style for arbitrary values like member colors.
- */
 function updateSelectColor(e) {
     const sel = e.target;
     sel.dataset.value = sel.value;
-
-    // Status-specific colors
     const statusColors = {
         'Not Started': '#000000',
         'In Progress': '#0d1a2e',
         'Done':        '#0a1a0d',
         'Dropped':     '#1a0a0a'
     };
-
     if (statusColors[sel.value] !== undefined) {
         sel.style.backgroundColor = statusColors[sel.value];
     }
@@ -291,7 +272,6 @@ function openModal(modalId) {
     content.classList.remove('animate-in');
     void content.offsetWidth;
     content.classList.add('animate-in');
-    // Apply color feedback after opening
     applySelectColors();
 }
 
@@ -366,7 +346,6 @@ function renderMemberRow(member = { name: '', color: '#ffffff' }) {
     const colorInput = memberRow.querySelector('.member-color-input');
     const confirmBtn = memberRow.querySelector('.color-confirm-btn');
 
-    // Live preview on confirm button while picking
     colorInput.addEventListener('input', () => {
         confirmBtn.style.background = colorInput.value;
         confirmBtn.style.transform = 'scale(1.12)';
@@ -375,7 +354,6 @@ function renderMemberRow(member = { name: '', color: '#ffffff' }) {
         confirmBtn.style.transform = 'scale(1)';
     });
 
-    // Confirm click: flash feedback
     confirmBtn.addEventListener('click', () => {
         confirmBtn.style.background = colorInput.value;
         confirmBtn.style.boxShadow = `0 0 12px ${colorInput.value}99`;
@@ -447,7 +425,6 @@ function openTaskModal(taskData = null, isNew = false, day = null) {
     populateMemberSelect(activeProject);
 
     const dateInput = document.getElementById('taskDateInput');
-    // No min/max — free infinite date selection
     dateInput.removeAttribute('min');
     dateInput.removeAttribute('max');
 
@@ -467,7 +444,6 @@ function openTaskModal(taskData = null, isNew = false, day = null) {
         document.getElementById('taskNote').value = '';
         document.getElementById('taskImageUrl').value = '';
         document.getElementById('taskStatusSelect').value = 'Not Started';
-        // Default to clicked day, or today
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         dateInput.value = day || toISODate(today);
@@ -565,8 +541,14 @@ function renderTask(taskData) {
         <div class="resizer" onmousedown="startResize(event, this.parentElement)"></div>
     `;
 
-    taskEl.addEventListener('dblclick', (e) => { e.stopPropagation(); openTaskModal(taskData); });
+    taskEl.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openTaskModal(taskData);
+    });
+
     taskEl.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return; // Only allow left-click for dragging
         if (e.target.classList.contains('resizer')) return;
         draggingTask = taskEl;
         taskEl.dataset.id = taskData.id;
@@ -581,14 +563,16 @@ function calculateTimeString(left, width) {
     const startHour = left / state.hourWidth;
     const endHour = (left + width) / state.hourWidth;
     const formatTime = (h) => {
-        const hrs = Math.floor(h);
-        const mins = Math.round((h - hrs) * 60);
-        return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+        const totalMinutes = Math.round(h * 60);
+        const hrs = Math.floor(totalMinutes / 60);
+        const mins = totalMinutes % 60;
+        return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
     };
     return `${formatTime(startHour)} - ${formatTime(endHour)}`;
 }
 
 function startResize(e, taskEl) {
+    if (e.button !== 0) return; // Only allow left-click for resizing
     e.stopPropagation();
     resizingTask = taskEl;
     taskEl.dataset.startWidth = taskEl.offsetWidth;
@@ -605,15 +589,29 @@ let isResizing = false;
 function handleDragMove(e) { mouseX = e.clientX; mouseY = e.clientY; }
 
 function dragUpdateLoop() {
+    const snapInterval = state.hourWidth * 0.25; // 15-minute grid
+
     if (isDragging && draggingTask) {
-        const newLeft = Math.max(0, mouseX - draggingTask.dataset.startX);
+        let newLeft = mouseX - draggingTask.dataset.startX;
+        // Snap to grid
+        newLeft = Math.round(newLeft / snapInterval) * snapInterval;
+        newLeft = Math.max(0, newLeft);
+
         draggingTask.style.left = `${newLeft}px`;
         const timeEl = draggingTask.querySelector('.time-estimate');
         if (timeEl) timeEl.innerText = calculateTimeString(newLeft, draggingTask.offsetWidth);
     }
     if (isResizing && resizingTask) {
         const diff = mouseX - resizingTask.dataset.mouseX;
-        const newWidth = Math.max(40, parseInt(resizingTask.dataset.startWidth) + diff);
+        let newWidth = parseInt(resizingTask.dataset.startWidth) + diff;
+
+        // Enforce minimum width
+        const minWidth = snapInterval;
+        newWidth = Math.max(minWidth, newWidth);
+
+        // Snap to grid
+        newWidth = Math.round(newWidth / snapInterval) * snapInterval;
+
         resizingTask.style.width = `${newWidth}px`;
         const timeEl = resizingTask.querySelector('.time-estimate');
         if (timeEl) timeEl.innerText = calculateTimeString(resizingTask.offsetLeft, newWidth);
@@ -670,11 +668,15 @@ function renderProjects() {
         if (p.active) li.className = 'active-project';
         if (p.starred) li.classList.add('starred');
         li.innerHTML = `<span class="dot"></span> ${p.name}${p.starred ? ' <span class="star-badge">★</span>' : ''}`;
-        li.onclick = () => switchProject(p.id);
+        // FIX: stopPropagation để tránh bubble lên nav-item cha
+        li.onclick = (e) => {
+            e.stopPropagation();
+            switchProject(p.id);
+        };
         li.addEventListener('contextmenu', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             currentContextMenuProjectId = p.id;
-            // Update star label
             const proj = state.projects.find(pr => pr.id === p.id);
             if (proj) {
                 document.getElementById('pmenuStarIcon').innerText = proj.starred ? '★' : '☆';
@@ -717,7 +719,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Rename popup logic
     const renamePopup = document.getElementById('renamePopup');
     document.getElementById('renameCancelBtn').addEventListener('click', () => {
         renamePopup.style.display = 'none';
@@ -736,7 +737,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renamePopup.style.display = 'none';
     });
 
-    // Context menu: Edit task
     document.getElementById('menuEdit').addEventListener('click', () => {
         hideContextMenus();
         if (window._contextMenuTaskData) {
@@ -752,7 +752,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function addNewProject() {
+// FIX: nhận event để stopPropagation, tránh bubble lên nav-item cha
+function addNewProject(e) {
+    if (e) e.stopPropagation();
     currentContextMenuProjectId = null;
     openProjectSettings();
 }
@@ -786,11 +788,128 @@ function syncSidebarProfile() {
     } catch(e) {}
 }
 
+/**
+ * Show read-only detail panel for a task (double-click)
+ */
+function openTaskDetail(taskData) {
+    const activeProject = state.projects.find(p => p.active);
+    const member = activeProject?.members.find(m => m.name === taskData.memberName);
+    const memberColor = member?.color || '#6e56cf';
+
+    const existing = document.getElementById('taskDetailModal');
+    if (existing) existing.remove();
+
+    const timeStr = calculateTimeString(taskData.left, taskData.width);
+
+    const statusIcons = {
+        'Not Started': '○',
+        'In Progress': '◑',
+        'Done': '●',
+        'Dropped': '✕'
+    };
+    const statusColors = {
+        'Not Started': '#888',
+        'In Progress': '#29a3a3',
+        'Done': '#4caf7d',
+        'Dropped': '#e05c5c'
+    };
+    const statusIcon = statusIcons[taskData.status] || '○';
+    const statusColor = statusColors[taskData.status] || '#888';
+
+    const imgHTML = taskData.image
+        ? `<img src="${taskData.image}" style="width:100%;border-radius:8px;margin-bottom:14px;max-height:140px;object-fit:cover;">`
+        : '';
+    const noteHTML = taskData.note
+        ? `<div class="detail-row"><span class="detail-icon">✎</span><span class="detail-text">${taskData.note}</span></div>`
+        : '';
+    const memberHTML = taskData.memberName
+        ? `<div class="detail-row"><span class="detail-dot" style="background:${memberColor}"></span><span class="detail-text">${taskData.memberName}</span></div>`
+        : '';
+
+    const modal = document.createElement('div');
+    modal.id = 'taskDetailModal';
+    modal.style.cssText = `
+        position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+        background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);
+    `;
+    modal.innerHTML = `
+        <div style="
+            background:linear-gradient(135deg,#0d0d1a 0%,#111128 100%);
+            border:1px solid rgba(255,255,255,0.1);
+            border-radius:16px;
+            padding:28px 28px 22px;
+            min-width:320px;max-width:400px;width:90%;
+            box-shadow:0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05);
+            position:relative;
+            animation: detailIn .2s cubic-bezier(.34,1.56,.64,1);
+        ">
+            <style>
+                @keyframes detailIn { from { opacity:0; transform:scale(.92) translateY(12px); } to { opacity:1; transform:none; } }
+                .detail-row { display:flex;align-items:flex-start;gap:10px;margin-bottom:10px; }
+                .detail-icon { font-size:13px;color:#888;margin-top:1px;flex-shrink:0; }
+                .detail-dot { width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px; }
+                .detail-text { font-size:13px;color:rgba(255,255,255,0.75);line-height:1.5; }
+                .detail-label { font-size:10px;letter-spacing:.1em;color:#555;text-transform:uppercase;margin-bottom:6px; }
+            </style>
+
+            <!-- Close -->
+            <div onclick="document.getElementById('taskDetailModal').remove()" style="
+                position:absolute;top:14px;right:16px;cursor:pointer;
+                color:#555;font-size:16px;line-height:1;transition:color .15s;
+            " onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">✕</div>
+
+            <!-- Header accent -->
+            <div style="width:36px;height:3px;border-radius:2px;background:${memberColor};margin-bottom:16px;"></div>
+
+            ${imgHTML}
+
+            <!-- Task name -->
+            <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:16px;line-height:1.3;">${taskData.name}</div>
+
+            <!-- Info rows -->
+            <div class="detail-row">
+                <span class="detail-icon">◷</span>
+                <span class="detail-text">${timeStr} &nbsp;·&nbsp; ${taskData.date}</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-icon" style="color:${statusColor}">${statusIcon}</span>
+                <span class="detail-text" style="color:${statusColor}">${taskData.status}</span>
+            </div>
+
+            ${memberHTML}
+            ${noteHTML}
+
+            <!-- Edit button -->
+            <div style="margin-top:18px;border-top:1px solid rgba(255,255,255,0.07);padding-top:16px;display:flex;justify-content:flex-end;">
+                <button onclick="
+                    document.getElementById('taskDetailModal').remove();
+                    openTaskModal(window._detailTask);
+                " style="
+                    background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+                    color:#fff;padding:7px 18px;border-radius:8px;cursor:pointer;font-size:12px;
+                    letter-spacing:.05em;transition:background .15s;
+                " onmouseover="this.style.background='rgba(255,255,255,0.12)'"
+                   onmouseout="this.style.background='rgba(255,255,255,0.06)'">
+                    ✎ Edit Mission
+                </button>
+            </div>
+        </div>
+    `;
+
+    window._detailTask = taskData;
+    document.body.appendChild(modal);
+
+    // Click outside to close
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+}
+
 function layoutAllTasks() {
     const activeProject = state.projects.find(p => p.active);
     if (!activeProject) return;
 
-    // Collect all unique task dates
     const taskDates = activeProject.tasks ? activeProject.tasks.map(t => t.date).filter(Boolean) : [];
     initTimeline(taskDates);
 
@@ -836,7 +955,6 @@ function layoutAllTasks() {
         activeProject.tasks.forEach(taskData => renderTask(taskData));
     }
 
-    // Scroll today into view
     const todayRow = document.querySelector('.today-row');
     if (todayRow) {
         setTimeout(() => todayRow.scrollIntoView({ behavior: 'smooth', block: 'center' }), 80);

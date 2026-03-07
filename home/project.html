@@ -16,7 +16,7 @@
             </div>
             <nav>
                 <ul class="nav-menu">
-                    <li class="nav-item">
+                    <li class="nav-item" onclick="navigateTo('../landing/landingpage.html')">
                         <span class="nav-icon">◈</span>Homepage
                     </li>
                     <li class="nav-item active">
@@ -24,14 +24,14 @@
                         <span class="chevron">▾</span>
                     </li>
                     <ul class="sub-menu open" id="projectList">
-                        <li class="add-project" onclick="addNewProject()">
+                        <li class="add-project" onclick="addNewProject(event)">
                             <span class="plus-icon">+</span> New Project
                         </li>
                     </ul>
-                    <li class="nav-item">
+                    <li class="nav-item" onclick="navigateTo('../setting/setting.html')">
                         <span class="nav-icon">⚙</span>Settings
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" onclick="navigateTo('../about/about.html')">
                         <span class="nav-icon">◎</span>About us
                     </li>
                 </ul>
