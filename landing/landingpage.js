@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const starField = document.getElementById('starField');
     if (starField) {
         const stars = [];
-        const NUM_STARS = 180;
+        const NUM_STARS = 210;
 
         for (let i = 0; i < NUM_STARS; i++) {
             const star = document.createElement('div');
@@ -40,10 +40,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             star.style.left = Math.random() * 100 + '%';
             star.style.opacity = 0.2 + depth * 0.6;
             // Twinkle via opacity animation only — NOT transform, so parallax works
-            star.style.animation = `twinkle ${3 + Math.random() * 4}s ${Math.random() * 5}s ease-in-out infinite`;
+            star.style.animation = `twinkle ${3 + Math.random() * 4}s ${Math.random() * 9}s ease-in-out infinite`;
 
             // Factor for both mouse and scroll parallax
-            star._factor = 0.015 + depth * 0.04; // noticeable but gentle
+            star._factor = 0.015 + depth * 0.07; // noticeable but gentle
 
             starField.appendChild(star);
             stars.push(star);
@@ -68,8 +68,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         function animateStars() {
             // Lerp for smooth mouse movement
-            curX += (mouseX - curX) * 0.04;
-            curY += (mouseY - curY) * 0.04;
+            curX += (mouseX - curX) * 0.09;
+            curY += (mouseY - curY) * 0.09;
 
             const cx = window.innerWidth / 2;
             const cy = window.innerHeight / 2;
