@@ -2,8 +2,8 @@
   font-family: 'Sinoreta';
   src: url('../Resources/hastegi/Hastegi.otf') format('truetype');
 }
-*{
-    font-size: larger;
+html {
+    font-size: 17px;
 }
 :root {
     --glass: rgba(255,255,255,0.025);
@@ -440,3 +440,8 @@ body {
     box-shadow: 0 12px 32px rgba(0,0,0,0.5);
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Global font override */
+*, *::before, *::after {
+    font-family: "Times New Roman", Times, serif !important;
+}

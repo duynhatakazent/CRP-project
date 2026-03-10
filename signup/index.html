@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client-id" content="">
     <title>Hello - Sign-Up</title>
     <link rel="stylesheet" href="../landing/landingpage.css">
     <link rel="stylesheet" href="auth.css">
@@ -25,17 +26,17 @@
 
             <form id="auth-form">
                 <div class="input-group">
-                    <input type="text" id="full-name" placeholder="Full Name" required>
+                    <input type="text" id="full-name" placeholder="Full Name" aria-label="Full Name" required>
                 </div>
                 <div class="input-group">
-                    <input type="email" id="email" placeholder="Email Address" required>
+                    <input type="email" id="email" placeholder="Email Address" aria-label="Email Address" required>
                 </div>
                 <div id="email-error" class="error-message"></div>
                 <div class="input-group">
-                    <input type="password" id="password" placeholder="Password" required>
+                    <input type="password" id="password" placeholder="Password" aria-label="Password" required>
                 </div>
                 <div class="input-group">
-                    <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+                    <input type="password" id="confirm-password" placeholder="Confirm Password" aria-label="Confirm Password" required>
                 </div>
                 <div id="password-error" class="error-message"></div>
                 <div id="password-policy" class="password-policy-container">
@@ -48,16 +49,20 @@
                     </ul>
                 </div>
                 <button type="submit" id="submit-btn" class="btn primary full-width">Create Universe</button>
+                <div class="social-divider" aria-hidden="true"><span>or</span></div>
+                <div id="google-signup-container" class="google-auth-container"></div>
+                <div id="google-signup-error" class="error-message" aria-live="polite"></div>
             </form>
 
             <div class="auth-footer">
                 <span>Already a star?</span>
-                <a href="../signin/index.html">Sign In</a>
+                <a href="/signin">Sign In</a>
             </div>
         </div>
     </div>
 
-    <script src="../landing/landingpage.js"></script>
+    <script src="../shared/auth.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="signup.js"></script>
 </body>
 </html>

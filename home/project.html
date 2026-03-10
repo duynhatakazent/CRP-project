@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hello - My Projects</title>
-    <link rel="stylesheet" href="project.css" />
+    <link rel="stylesheet" href="/home/project.css" />
 </head>
 <body class="stars-bg">
     <div class="star-field" id="starField"></div>
@@ -16,12 +16,9 @@
             </div>
             <nav>
                 <ul class="nav-menu">
-                    <li class="nav-item" onclick="navigateTo('../landing/landingpage.html')">
-                        <span class="nav-icon">◈</span>Homepage
-                    </li>
                     <li class="nav-item active">
-                        <span class="nav-icon">◉</span>My Projects
-                        <span class="chevron">▾</span>
+                        <span class="nav-icon">&#9673;</span>My Projects
+                        <span class="chevron">&#9662;</span>
                     </li>
                     <ul class="sub-menu open" id="projectList">
                         <li class="add-project" onclick="addNewProject(event)">
@@ -29,25 +26,19 @@
                         </li>
                     </ul>
                     <li class="nav-item" onclick="navigateTo('../setting/setting.html')">
-                        <span class="nav-icon">⚙</span>Settings
-                    </li>
-                    <li class="nav-item" onclick="navigateTo('../about/about.html')">
-                        <span class="nav-icon">◎</span>About us
+                        <span class="nav-icon">&#9881;</span>Settings
                     </li>
                 </ul>
             </nav>
             <div class="sidebar-footer">
                 <a class="profile-card" href="../setting/setting.html#tab-account" id="profileCard">
-                    <div class="profile-avatar" id="sidebarAvatar">✦</div>
+                    <div class="profile-avatar" id="sidebarAvatar">&#10022;</div>
                     <div class="profile-info">
                         <div class="profile-name" id="sidebarName">Astronaut</div>
                         <div class="profile-version">Orbit v2.0</div>
                     </div>
-                    <span class="profile-arrow">›</span>
+                    <span class="profile-arrow">&#8250;</span>
                 </a>
-                <button class="logout-btn" id="logoutBtn">
-                    <span class="logout-icon">⏻</span> Sign Out
-                </button>
             </div>
         </aside>
 
@@ -59,7 +50,24 @@
                 </div>
                 <div class="header-right">
                     <button id="addTaskBtn" class="btn primary">Add Task</button>
-                    <div class="time-range-label">—</div>
+                    <div class="view-switch" role="tablist" aria-label="Task view mode">
+                        <button type="button" class="view-btn active" id="timelineViewBtn" data-view="timeline" aria-pressed="true">Timeline</button>
+                        <button type="button" class="view-btn" id="boardViewBtn" data-view="board" aria-pressed="false">Board</button>
+                    </div>
+                    <div class="board-filters">
+                        <input type="text" id="taskSearchInput" placeholder="Search tasks..." aria-label="Search tasks" />
+                        <select id="taskStatusFilter" aria-label="Filter by status">
+                            <option value="All">All Statuses</option>
+                            <option value="Not Started">Not Started</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Done">Done</option>
+                            <option value="Dropped">Dropped</option>
+                        </select>
+                        <select id="taskMemberFilter" aria-label="Filter by member">
+                            <option value="All">All Members</option>
+                        </select>
+                    </div>
+                    <div class="time-range-label">&mdash;</div>
                 </div>
             </header>
 
@@ -74,25 +82,33 @@
                     <div class="days-grid" id="daysGrid"></div>
                 </div>
             </div>
+
+            <div class="kanban-wrapper" id="kanbanWrapper" hidden>
+                <div class="kanban-container" id="kanbanContainer"></div>
+            </div>
         </main>
     </div>
 
     <div id="taskModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">New Mission</h2>
-                <div class="modal-close" id="cancelBtn">✕</div>
+                <h2 id="modalTitle">New Task</h2>
+                <div class="modal-close" id="cancelBtn">&times;</div>
             </div>
             <div class="input-group">
-                <label>Mission Name</label>
-                <input type="text" id="taskInput" placeholder="Enter task name..." />
+                <label for="taskInput">Task Name</label>
+                <input type="text" id="taskInput" placeholder="Enter task name..." required maxlength="120" />
             </div>
             <div class="input-group">
-                <label>Date</label>
-                <input type="date" id="taskDateInput" />
+                <label for="taskStartAtInput">Start</label>
+                <input type="datetime-local" id="taskStartAtInput" />
             </div>
             <div class="input-group">
-                <label>Status</label>
+                <label for="taskEndAtInput">End</label>
+                <input type="datetime-local" id="taskEndAtInput" />
+            </div>
+            <div class="input-group">
+                <label for="taskStatusSelect">Status</label>
                 <select id="taskStatusSelect">
                     <option value="Not Started">Not Started</option>
                     <option value="In Progress">In Progress</option>
@@ -101,11 +117,19 @@
                 </select>
             </div>
             <div class="input-group">
-                <label>Notes</label>
+                <label for="taskPrioritySelect">Priority</label>
+                <select id="taskPrioritySelect">
+                    <option value="Low">Low</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="High">High</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="taskNote">Notes</label>
                 <textarea id="taskNote" placeholder="Optional notes..."></textarea>
             </div>
             <div class="input-group">
-                <label>Image URL</label>
+                <label for="taskImageUrl">Image URL</label>
                 <div class="file-input-wrapper">
                     <input type="text" id="taskImageUrl" placeholder="https://..." />
                     <label for="taskImageFile" class="file-input-label">Choose File</label>
@@ -113,40 +137,45 @@
                 </div>
             </div>
             <div class="input-group">
-                <label>Assign to</label>
+                <label for="taskMembersSelect">Assign to</label>
                 <select id="taskMembersSelect"></select>
             </div>
             <div class="modal-actions">
-                <button id="deleteBtn" class="danger">Delete Mission</button>
+                <button id="deleteBtn" class="danger">Delete Task</button>
                 <button id="abortBtn">Abort</button>
-                <button id="confirmBtn">⟶ Confirm</button>
+                <button id="confirmBtn">Confirm</button>
             </div>
         </div>
     </div>
 
     <div id="contextMenu" class="context-menu">
         <div class="menu-item" id="menuEdit">
-            <span class="menu-icon">✎</span> Edit Task
+            <span class="menu-icon">&#9998;</span> Edit Task
         </div>
         <div class="menu-divider"></div>
+        <div class="menu-item" id="menuStatusNotStarted">Set: Not Started</div>
+        <div class="menu-item" id="menuStatusInProgress">Set: In Progress</div>
+        <div class="menu-item" id="menuStatusDone">Set: Done</div>
+        <div class="menu-item" id="menuStatusDropped">Set: Dropped</div>
+        <div class="menu-divider"></div>
         <div class="menu-item danger" id="menuDelete">
-            <span class="menu-icon">⊗</span> Delete Task
+            <span class="menu-icon">&#8855;</span> Delete Task
         </div>
     </div>
 
     <!-- Project context menu -->
     <div id="projectContextMenu" class="context-menu">
         <div class="menu-item" id="pmenuStar">
-            <span class="menu-icon" id="pmenuStarIcon">☆</span>
+            <span class="menu-icon" id="pmenuStarIcon">&#9734;</span>
             <span id="pmenuStarLabel">Mark as Starred</span>
         </div>
         <div class="menu-divider"></div>
         <div class="menu-item" id="pmenuSettings">
-            <span class="menu-icon">⚙</span> Settings
+            <span class="menu-icon">&#9881;</span> Settings
         </div>
         <div class="menu-divider"></div>
         <div class="menu-item danger" id="pmenuDelete">
-            <span class="menu-icon">⊗</span> Delete Project
+            <span class="menu-icon">&#8855;</span> Delete Project
         </div>
     </div>
 
@@ -154,14 +183,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="settingsModalTitle">Project Settings</h2>
-                <div class="modal-close" id="cancelSettingsBtn">✕</div>
+                <div class="modal-close" id="cancelSettingsBtn">&times;</div>
             </div>
             <div class="input-group">
-                <label>Project Name</label>
-                <input type="text" id="projectNameInput" placeholder="Enter project name..." />
+                <label for="projectNameInput">Project Name</label>
+                <input type="text" id="projectNameInput" placeholder="Enter project name..." maxlength="80" />
             </div>
             <div class="input-group">
-                <label>Background</label>
+                <label for="projectBackgroundInput">Background</label>
                 <div class="file-input-wrapper">
                     <input type="text" id="projectBackgroundInput" placeholder="Enter background image URL..." />
                     <label for="projectBackgroundFile" class="file-input-label">Choose File</label>
@@ -169,12 +198,12 @@
                 </div>
             </div>
             <div class="input-group">
-                <label>Members</label>
+                <label for="projectMembersList">Members</label>
                 <div id="projectMembersList" class="members-list"></div>
                 <button id="addMemberBtn" class="btn-add-member">+ Add Member</button>
             </div>
             <div class="modal-actions">
-                <button id="confirmSettingsBtn">⟶ Confirm</button>
+                <button id="confirmSettingsBtn">Confirm</button>
             </div>
         </div>
     </div>
@@ -182,7 +211,7 @@
     <!-- Inline rename popup -->
     <div id="renamePopup" class="rename-popup">
         <div class="rename-label">Rename Project</div>
-        <input id="renameInput" type="text" placeholder="Project name..." />
+        <input id="renameInput" type="text" placeholder="Project name..." maxlength="80" />
         <div class="rename-actions">
             <button id="renameCancelBtn">Cancel</button>
             <button id="renameConfirmBtn">Rename</button>
@@ -194,7 +223,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="customConfirmTitle"></h2>
-                <div class="modal-close" id="customConfirmClose">✕</div>
+                <div class="modal-close" id="customConfirmClose">&times;</div>
             </div>
             <p id="customConfirmMessage"></p>
             <div class="modal-actions">
@@ -204,6 +233,9 @@
         </div>
     </div>
 
-    <script src="project.js"></script>
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/task-api.js"></script>
+    <script src="/home/project.js"></script>
 </body>
 </html>
+

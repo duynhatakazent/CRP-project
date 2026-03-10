@@ -1,3 +1,7 @@
+html {
+    font-size: 17px;
+}
+
 .auth-container {
     display: flex;
     justify-content: center;
@@ -57,4 +61,9 @@ a:hover {
 
 .auth-footer {
     margin-top: 1.5rem;
+}
+
+/* Global font override */
+*, *::before, *::after {
+    font-family: "Times New Roman", Times, serif !important;
 }

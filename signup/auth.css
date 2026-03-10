@@ -2,8 +2,8 @@
   font-family: 'Sinoreta';
   src: url('../Resources/hastegi/Hastegi.otf') format('truetype');
 }
-*{
-    font-size: large;
+html {
+    font-size: 17px;
 }
 .auth-container {
     min-height: 100vh;
@@ -60,6 +60,54 @@
 .full-width {
     width: 100%;
     margin-top: 1rem;
+}
+
+.social-divider {
+    margin: 0.95rem 0 0.75rem;
+    position: relative;
+    text-align: center;
+}
+
+.social-divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.social-divider span {
+    position: relative;
+    display: inline-block;
+    padding: 0 10px;
+    background: rgba(10, 10, 18, 0.85);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.74rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.google-auth-container {
+    display: flex;
+    justify-content: center;
+    min-height: 44px;
+}
+
+.google-fallback-btn {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    padding: 0.82rem 1rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.google-fallback-btn:hover {
+    background: rgba(255, 255, 255, 0.11);
 }
 
 .auth-footer {
@@ -134,4 +182,9 @@
     font-size: 0.8rem;
     margin-top: 0.5rem;
     text-align: left;
+}
+
+/* Global font override */
+*, *::before, *::after {
+    font-family: "Times New Roman", Times, serif !important;
 }

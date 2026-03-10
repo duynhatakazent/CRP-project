@@ -2,8 +2,8 @@
   font-family: 'Sinoreta';
   src: url('../Resources/hastegi/Hastegi.otf') format('truetype');
 }
-*{
-    font-size: large;
+html {
+  font-size: 17px;
 }
 :root {
   --fg: #fff;
@@ -183,4 +183,9 @@ footer {
 
 .cta .btn{
   font-family: 'Sinoreta';
+}
+
+/* Global font override */
+*, *::before, *::after {
+  font-family: "Times New Roman", Times, serif !important;
 }

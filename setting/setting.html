@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hello - Settings</title>
-    <link rel="stylesheet" href="setting.css" />
+    <link rel="stylesheet" href="/setting/setting.css" />
 </head>
 <body>
     <div class="star-field" id="starField"></div>
@@ -18,18 +18,12 @@
             </div>
             <nav>
                 <ul class="nav-menu">
-                    <li class="nav-item" onclick="location.href='../landing/landingpage.html'">
-                        <span class="nav-icon">◈</span>Homepage
-                    </li>
                     <li class="nav-item" onclick="location.href='../home/project.html'">
-                        <span class="nav-icon">◉</span>My Projects
-                        <span class="chevron">▾</span>
+                        <span class="nav-icon">&#9673;</span>My Projects
+                        <span class="chevron">&#9662;</span>
                     </li>
                     <li class="nav-item active">
-                        <span class="nav-icon">⚙</span>Settings
-                    </li>
-                    <li class="nav-item" onclick="location.href='../about/about.html'">
-                        <span class="nav-icon">◎</span>About us
+                        <span class="nav-icon">&#9881;</span>Settings
                     </li>
                 </ul>
             </nav>
@@ -388,11 +382,11 @@
                                 <div class="card-sub">Used for task time calculations</div>
                             </div>
                             <select class="select-input" id="tzSelect">
-                                <option>UTC+7 (Ho Chi Minh)</option>
-                                <option>UTC+0 (London)</option>
-                                <option>UTC-5 (New York)</option>
-                                <option>UTC+9 (Tokyo)</option>
-                                <option>UTC+8 (Singapore)</option>
+                                <option value="Asia/Ho_Chi_Minh">UTC+7 (Ho Chi Minh)</option>
+                                <option value="Europe/London">UTC+0 (London)</option>
+                                <option value="America/New_York">UTC-5 (New York)</option>
+                                <option value="Asia/Tokyo">UTC+9 (Tokyo)</option>
+                                <option value="Asia/Singapore">UTC+8 (Singapore)</option>
                             </select>
                         </div>
                         <div class="card-divider"></div>
@@ -433,6 +427,14 @@
                             </div>
                             <button class="action-btn danger" id="resetBtn">Reset</button>
                         </div>
+                        <div class="card-divider"></div>
+                        <div class="card-row">
+                            <div class="card-info">
+                                <div class="card-label">Sign Out</div>
+                                <div class="card-sub">Log out from this account on this device</div>
+                            </div>
+                            <button class="action-btn danger" id="accountLogoutBtn">Sign Out</button>
+                        </div>
                     </div>
                 </section>
 
@@ -443,6 +445,7 @@
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
-    <script src="setting.js"></script>
+    <script src="../shared/auth.js"></script>
+    <script src="/setting/setting.js"></script>
 </body>
 </html>

@@ -1,17 +1,22 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // ─── NAVIGATION ───
-    const getStartedBtn = document.querySelector('.btn.primary');
+    const getStartedBtn = document.querySelector('header .cta .btn.primary');
     if (getStartedBtn) {
-        getStartedBtn.addEventListener('click', () => {
-            if (localStorage.getItem('isLoggedIn') === 'true') {
-                window.location.href = '../home/project.html';
+        getStartedBtn.addEventListener('click', async () => {
+            let loggedIn = false;
+            if (window.OrbitAuth) {
+                const user = await window.OrbitAuth.getCurrentUser();
+                loggedIn = !!user;
+            }
+            if (loggedIn) {
+                window.location.href = '/home/project.html';
             } else {
-                window.location.href = '../signin/index.html';
+                window.location.href = '/signin/signin.html';
             }
         });
     }
 
-    const aboutUsBtn = document.querySelector('.btn:not(.primary)');
+    const aboutUsBtn = document.querySelector('header .cta .btn:not(.primary)');
     if (aboutUsBtn) {
         aboutUsBtn.addEventListener('click', () => {
             window.location.href = '../about/about.html';
