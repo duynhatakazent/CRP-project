@@ -443,5 +443,5 @@ body {
 
 /* Global font override */
 *, *::before, *::after {
-    font-family: "Times New Roman", Times, serif !important;
+    font-family: "Sinoreta", Times, serif !important;
 }
