@@ -3,7 +3,7 @@
     { "source": "/api/:path*", "destination": "https://api.nhanctm.site/api/:path*" },
     { "source": "/landing", "destination": "/landing/landingpage.html" },
     { "source": "/signin/", "destination": "/signin/signin.html" },
-    { "source": "/signin/index.html", "destination": "/signin/signin.html" },
+    { "source": "/signin/index.html", "destination": "/signin/signin.html" }, 
     { "source": "/signin", "destination": "/signin/signin.html" },
     { "source": "/signup", "destination": "/signup/index.html" },
     { "source": "/home", "destination": "/home/project.html" },
